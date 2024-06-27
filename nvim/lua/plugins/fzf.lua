@@ -1,7 +1,11 @@
 -- helper function
 function contextual_fzf() 
-  vim.cmd("!git rev-parse --show-toplevel", { silent = true })
-  vim.cmd("FzfLua files")
+  local is_git = vim.cmd("!git rev-parse --show-toplevel", { silent = true })
+  if is_git then
+    vim.cmd("FzfLua git_files")
+  else 
+    vim.cmd("FzfLua files")
+  end
 end
 
 -- set keymap

@@ -1,5 +1,15 @@
+
 local function tree_on_attach(bufnr) 
   local api = require("nvim-tree.api")
+  local function opts(desc)
+    return {
+      desc = 'nvim-tree: ' .. desc,
+      buffer = bufnr,
+      noremap = true,
+      silent = true,
+      nowait = true,
+    }
+  end
 
   -- default mappings
   api.config.mappings.default_on_attach(bufnr)
@@ -8,9 +18,9 @@ local function tree_on_attach(bufnr)
   -- del conflict keymappings first
   -- vim.keymap.del("n", "s")
 
-  vim.keymap.set("n", "<Leader>fe", "<cmd> NvimTreeToggle<CR>", { silent = true })
-  vim.keymap.set("n", "i", api.node.open.horizontal, { buffer = true, silent = true })
-  vim.keymap.set("n", "s", api.node.open.vertical, { buffer = true, silent = true })
+  vim.keymap.set("n", "<Leader>fe", "<cmd> NvimTreeToggle<CR>", opts("toggle it"))
+  vim.keymap.set("n", "i", api.node.open.horizontal, opts("Open: horizontal split"))
+  vim.keymap.set("n", "s", api.node.open.vertical, opts("Open: vertical split"))
 end
 
 require("nvim-tree").setup({
