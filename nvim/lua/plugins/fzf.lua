@@ -10,6 +10,7 @@ end
 
 -- set keymap
 vim.keymap.set("n", "<C-p>", contextual_fzf, { silent = true })
+vim.keymap.set("n", "<Leader>ff", "<cmd> FzfLua<CR>", { silent = true })
 
 require("fzf-lua").setup({
 })

@@ -18,7 +18,7 @@ local function tree_on_attach(bufnr)
   -- del conflict keymappings first
   -- vim.keymap.del("n", "s")
 
-  vim.keymap.set("n", "<Leader>fe", "<cmd> NvimTreeToggle<CR>", opts("toggle it"))
+  vim.keymap.set("n", "<Leader>fe", "<cmd> NvimTreeToggle<CR>", { silent = true })
   vim.keymap.set("n", "i", api.node.open.horizontal, opts("Open: horizontal split"))
   vim.keymap.set("n", "s", api.node.open.vertical, opts("Open: vertical split"))
 end

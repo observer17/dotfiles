@@ -1,3 +1,6 @@
+require("config.keymap")
+
+-- load plugins first
 require("config.lazy")
 
 require("config.options")
