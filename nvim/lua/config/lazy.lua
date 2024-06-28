@@ -21,6 +21,8 @@ require("lazy").setup({
       lazy = false,
       priority = 1000,
     },
+    -- ui reletea
+    { "nvim-tree/nvim-web-devicons" },
     -- lsp & auto-complete
     { "neovim/nvim-lspconfig" },
     { "hrsh7th/nvim-cmp" },
