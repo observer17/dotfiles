@@ -1,5 +1,5 @@
 -- helper function
-function contextual_fzf()
+local function contextual_fzf()
   local is_git = vim.cmd("!git rev-parse --show-toplevel", { silent = true })
   if is_git then
     vim.cmd("FzfLua git_files")

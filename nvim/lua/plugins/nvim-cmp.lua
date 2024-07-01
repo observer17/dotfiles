@@ -1,7 +1,7 @@
 local cmp = require("cmp")
 
 -- util funtion
-function select_next_item(fallback) 
+local function select_next_item(fallback)
   if cmp.visible() then
     cmp.select_next_item()
   else

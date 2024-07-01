@@ -21,9 +21,11 @@ require("lazy").setup({
     -- ui reletea
     { "nvim-tree/nvim-web-devicons" },
     -- lsp & auto-complete
+    { "williamboman/mason.nvim" },
     { "neovim/nvim-lspconfig" },
     { "hrsh7th/nvim-cmp" },
     { "hrsh7th/cmp-nvim-lsp" },
+    { "folke/neodev.nvim" },
     -- program language related
     { "nvim-treesitter/nvim-treesitter" },
     -- search
