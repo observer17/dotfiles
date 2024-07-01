@@ -7,9 +7,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-vim.g.mapleader = ";"
-vim.g.maplocalleader = "\\"
-
 -- load plugins
 require("lazy").setup({
   spec = {
@@ -27,12 +24,21 @@ require("lazy").setup({
     { "neovim/nvim-lspconfig" },
     { "hrsh7th/nvim-cmp" },
     { "hrsh7th/cmp-nvim-lsp" },
+    -- program language related
+    { "nvim-treesitter/nvim-treesitter" },
     -- search
     { "ibhagwan/fzf-lua",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-  },
-  -- file explorer
-  { "nvim-tree/nvim-tree.lua" }
+      dependencies = { "nvim-tree/nvim-web-devicons" },
+    },
+    -- file explorer
+    { "nvim-tree/nvim-tree.lua" },
+    -- tools for dev
+    { "numToStr/Comment.nvim" },
+    {
+      'windwp/nvim-autopairs',
+      event = "InsertEnter",
+      config = true
+    },
 },
 checker = { enable = true },
 })

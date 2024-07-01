@@ -9,6 +9,8 @@ require("config.lsp")
 
 -- plugins customize
 require("plugins.nvim-web-devicons")
+require("plugins.comment")
 require("plugins.nvim-tree")
 require("plugins.nvim-cmp")
 require("plugins.fzf")
+require("plugins.nvim-treesitter")
