@@ -18,14 +18,22 @@ require("lazy").setup({
       lazy = false,
       priority = 1000,
     },
+    { "navarasu/onedark.nvim" },
+    { "bluz71/vim-moonfly-colors" },
     -- ui reletea
     { "nvim-tree/nvim-web-devicons" },
+    { "nvim-lualine/lualine.nvim" },
     -- lsp & auto-complete
     { "williamboman/mason.nvim" },
+    { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
     { "neovim/nvim-lspconfig" },
     { "hrsh7th/nvim-cmp" },
     { "hrsh7th/cmp-nvim-lsp" },
     { "folke/neodev.nvim" },
+    -- format 
+    { "nvimtools/none-ls.nvim",
+      dependencies = { "nvim-lua/plenary.nvim" },
+    },
     -- program language related
     { "nvim-treesitter/nvim-treesitter" },
     -- search

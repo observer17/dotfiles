@@ -19,5 +19,5 @@ vim.keymap.set("n", "<Leader>sv", "<cmd> luafile $MYVIMRC<CR>")
 vim.keymap.set("n", "<space>", ":")
 
 -- 切换buffer
-vim.keymap.set("n", "<C-B>", "<cmd> bp<CR>")
-vim.keymap.set("n", "<C-F>", "<cmd> bn<CR>")
+vim.keymap.set("n", "<C-b>", "<cmd> bp<CR>")
+vim.keymap.set("n", "<C-f>", "<cmd> bn<CR>")
