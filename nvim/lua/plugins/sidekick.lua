@@ -33,10 +33,23 @@ require("sidekick").setup({
 			end,
 		},
 	},
+
+  nes = {
+    enable = false,
+  },
+  -- cli
+  cli = {
+    tools = {
+      coco = {
+        cmd = { "coco" },
+        title = "Coco",
+      }
+    }
+  }
 })
 
 -- Keymaps for sidekick
-vim.keymap.set("n", "<leader>ts", "<cmd>Sidekick toggle<cr>", {
+vim.keymap.set("n", "<leader>ts", "<cmd>Sidekick cli toggle<cr>", {
 	desc = "Toggle sidekick panel",
 })
 
