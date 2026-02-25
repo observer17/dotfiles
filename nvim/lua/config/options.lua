@@ -33,3 +33,23 @@ vim.opt.termguicolors = true
 
 -- Search
 vim.opt.hlsearch = true
+
+-- lsp
+vim.lsp.set_log_level("off")
+
+-- **************** --
+-- Shell（macOS 推荐设置）
+-- **************** --
+
+do
+  local homebrew_zsh = "/opt/homebrew/bin/zsh"
+  if vim.fn.executable(homebrew_zsh) == 1 then
+    vim.opt.shell = homebrew_zsh
+  else
+    vim.opt.shell = vim.env.SHELL or "/bin/zsh"
+  end
+  -- 让 :terminal 和 :! 命令以登录方式加载环境（PATH 等）
+  vim.opt.shellcmdflag = "-lc"
+  -- 让 Git 使用 Neovim 作为编辑器
+  vim.env.GIT_EDITOR = "nvim"
+end

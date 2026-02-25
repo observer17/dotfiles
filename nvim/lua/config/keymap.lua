@@ -21,3 +21,7 @@ vim.keymap.set("n", "<space>", ":")
 -- 切换buffer
 vim.keymap.set("n", "<C-b>", "<cmd> bp<CR>")
 vim.keymap.set("n", "<C-f>", "<cmd> bn<CR>")
+
+-- sidekick shell panel
+vim.keymap.set("n", "<Leader>ts", "<cmd>Sidekick toggle<CR>", { desc = "Toggle sidekick panel" })
+vim.keymap.set("n", "<Leader>sh", "<cmd>Sidekick toggle shell<CR>", { desc = "Toggle sidekick shell" })

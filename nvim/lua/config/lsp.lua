@@ -1,4 +1,5 @@
-local lspconfig = require("lspconfig")
+-- Migrate away from nvim-lspconfig "framework" to native Neovim APIs
+-- Uses vim.lsp.config + vim.lsp.start with autocommands per filetype
 
 local function show_diagnostic_float()
 	-- for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
@@ -66,27 +67,68 @@ vim.api.nvim_create_autocmd("CursorHold", {
 --
 -- diagnostic related config  end ---
 
--- ls for cpp using ccls
--- lspconfig.ccls.setup({
---   init_options = {
---     index = {
---       threads = 3
---     }
---   },
---   on_attach = on_attach,
--- })
+-- Root finder helper
+local function find_root(bufnr, markers)
+  local fname = vim.api.nvim_buf_get_name(bufnr)
+  local start = vim.fs.dirname(fname)
+  local found = vim.fs.find(markers, { path = start, upward = true })[1]
+  return found and vim.fs.dirname(found) or start
+end
 
--- ls for cpp using clangd
--- it seems like clangd is much more faster then ccls
-lspconfig.clangd.setup({
-	cmd = {
-		"clangd",
-		"--offset-encoding=utf-16",
-	},
-	init_options = {
-		index = {
-			threads = 3,
-		},
-	},
-	on_attach = on_attach,
+-- Autostart per filetype with dynamic root_dir
+local grp = vim.api.nvim_create_augroup("UserLspAutoStart", { clear = true })
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = grp,
+  pattern = { "c", "cpp", "objc", "objcpp" },
+  callback = function(args)
+    local root = find_root(args.buf, { "compile_commands.json", "compile_flags.txt", ".git" })
+    vim.lsp.start({
+      name = "clangd",
+      cmd = { "clangd", "--offset-encoding=utf-16", "--log=verbose" },
+      init_options = { index = { threads = 3 } },
+      on_attach = on_attach,
+      root_dir = root,
+    })
+  end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = grp,
+  pattern = { "rust" },
+  callback = function(args)
+    local root = find_root(args.buf, { "Cargo.toml", "rust-project.json", ".git" })
+    -- Prefer rustup-provided rust-analyzer to match proc-macro server version
+    local rustup_ra = vim.fn.systemlist("rustup which rust-analyzer")[1]
+    local ra_cmd = (rustup_ra and vim.fn.executable(rustup_ra) == 1) and { rustup_ra } or { "rust-analyzer" }
+    vim.lsp.start({
+      name = "rust_analyzer",
+      cmd = ra_cmd,
+      on_attach = on_attach,
+      root_dir = root,
+      settings = {
+        ["rust-analyzer"] = {
+          imports = { granularity = { group = "module" }, prefix = "self" },
+          cargo = { buildScripts = { enable = false } },
+          procMacro = { enable = false },
+        },
+      },
+    })
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = grp,
+  pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+  callback = function(args)
+    local root = find_root(args.buf, { "tsconfig.json", "jsconfig.json", "package.json", ".git" })
+    vim.lsp.start({
+      name = "ts_ls",
+      cmd = { "typescript-language-server", "--stdio" },
+      on_attach = on_attach,
+      root_dir = root,
+    })
+  end,
+})
+
+-- gn
