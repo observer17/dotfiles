@@ -1,13 +1,20 @@
 require("neodev").setup({})
 
-local function on_attach(client, bufnr)
-	local opts = { buffer = bufnr }
-	vim.keymap.set("n", "gd", "<cmd> lua vim.lsp.buf.definition()<CR>", opts)
-	vim.keymap.set("n", "gD", "<cmd> lua vim.lsp.buf.declaration()<CR>", opts)
-	vim.keymap.set("n", "gr", "<cmd> lua vim.lsp.buf.references()<CR>", opts)
-	vim.keymap.set("n", "gi", "<cmd> lua vim.lsp.buf.implementation()<CR>", opts)
+local function is_aha_repo()
+  local origin = vim.fn.systemlist({ "git", "remote", "get-url", "origin" })[1] or ""
+  return origin:find("lark/aha") ~= nil
+end
 
-	vim.keymap.set("n", "<Leader>f", "<cmd> lua vim.lsp.buf.format()<CR>", opts)
+local function on_attach(client, bufnr)
+  local opts = { buffer = bufnr }
+  vim.keymap.set("n", "gd", "<cmd> lua vim.lsp.buf.definition()<CR>", opts)
+  vim.keymap.set("n", "gD", "<cmd> lua vim.lsp.buf.declaration()<CR>", opts)
+  vim.keymap.set("n", "gr", "<cmd> lua vim.lsp.buf.references()<CR>", opts)
+  vim.keymap.set("n", "gi", "<cmd> lua vim.lsp.buf.implementation()<CR>", opts)
+
+  if not is_aha_repo() then
+    vim.keymap.set("n", "<Leader>f", "<cmd> lua vim.lsp.buf.format()<CR>", opts)
+  end
 end
 
 local function find_root(bufnr, markers)

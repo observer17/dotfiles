@@ -1,6 +1,8 @@
 -- Migrate away from nvim-lspconfig "framework" to native Neovim APIs
 -- Uses vim.lsp.config + vim.lsp.start with autocommands per filetype
 
+local repo = require("utils.repo")
+
 local function show_diagnostic_float()
 	-- for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
 	--   if vim.api.nvim_win_get_config(winid).zindex then
@@ -36,6 +38,7 @@ local function range_format()
 	vim.api.nvim_feedkeys(esc_key, "v", true)
 end
 
+-- 判断当前仓库是否为 AHA 仓库（用于快捷键覆盖策略）
 local function on_attach(client, bufnr)
 	local opts = { buffer = bufnr }
 	vim.keymap.set("n", "gd", "<cmd> lua vim.lsp.buf.definition()<CR>", opts)
@@ -44,8 +47,11 @@ local function on_attach(client, bufnr)
 	vim.keymap.set("n", "gi", "<cmd> lua vim.lsp.buf.implementation()<CR>", opts)
 
 	-- keymap for format
-	vim.keymap.set("n", "<Leader>f", "<cmd> lua vim.lsp.buf.format()<CR>", opts)
-	vim.keymap.set("v", "<Leader>f", range_format, opts)
+	-- 在 AHA 仓库下不设置 LSP 的 <Leader>f，由 null-ls 模块进行覆盖
+	if not repo.is_aha_repo() then
+		vim.keymap.set("n", "<Leader>f", "<cmd> lua vim.lsp.buf.format()<CR>", opts)
+		vim.keymap.set("v", "<Leader>f", range_format, opts)
+	end
 end
 
 -- diagnostic related config  start ---
@@ -85,7 +91,12 @@ vim.api.nvim_create_autocmd("FileType", {
     local root = find_root(args.buf, { "compile_commands.json", "compile_flags.txt", ".git" })
     vim.lsp.start({
       name = "clangd",
-      cmd = { "clangd", "--offset-encoding=utf-16", "--log=verbose" },
+      cmd = {
+        "clangd",
+        "--offset-encoding=utf-16",
+        "--log=verbose",
+        "--query-driver=/usr/bin/clang,/opt/homebrew/opt/llvm/bin/clang",
+      },
       init_options = { index = { threads = 3 } },
       on_attach = on_attach,
       root_dir = root,
@@ -127,6 +138,29 @@ vim.api.nvim_create_autocmd("FileType", {
       cmd = { "typescript-language-server", "--stdio" },
       on_attach = on_attach,
       root_dir = root,
+    })
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = grp,
+  pattern = { "python" },
+  callback = function(args)
+    local root = find_root(args.buf, { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile", "pyrightconfig.json", ".git" })
+    vim.lsp.start({
+      name = "pyright",
+      cmd = { "pyright-langserver", "--stdio" },
+      on_attach = on_attach,
+      root_dir = root,
+      settings = {
+        python = {
+          analysis = {
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+            diagnosticMode = "openFilesOnly",
+          },
+        },
+      },
     })
   end,
 })

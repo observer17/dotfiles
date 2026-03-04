@@ -37,6 +37,10 @@ vim.opt.hlsearch = true
 -- lsp
 vim.lsp.set_log_level("off")
 
+-- FS settings to avoid conflicts with file watchers (like rust-analyzer) on macOS
+vim.opt.backupcopy = "yes"
+vim.opt.writebackup = false
+
 -- **************** --
 -- Shell（macOS 推荐设置）
 -- **************** --
