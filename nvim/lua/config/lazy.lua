@@ -31,7 +31,12 @@ require("lazy").setup({
 		{ "nvim-tree/nvim-web-devicons" },
 		{ "nvim-lualine/lualine.nvim" },
 		-- lsp & auto-complete
-		{ "williamboman/mason.nvim" },
+		{
+			"williamboman/mason.nvim",
+			dependencies = {
+				"WhoIsSethDaniel/mason-tool-installer.nvim",
+			},
+		},
 		{ "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
 		{
 			"hrsh7th/nvim-cmp",

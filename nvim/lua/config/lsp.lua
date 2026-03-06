@@ -50,4 +50,4 @@ vim.lsp.config("*", {
 
 -- --- Enable servers ---
 -- Neovim will automatically load from lsp/*.lua
-vim.lsp.enable({ "clangd", "rust_analyzer", "ts_ls", "pyright", "lua_ls" })
+vim.lsp.enable({ "clangd", "rust_analyzer", "ts_ls", "pyright", "lua_ls", "gn" })
