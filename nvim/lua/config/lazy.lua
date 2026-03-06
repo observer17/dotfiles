@@ -33,7 +33,6 @@ require("lazy").setup({
 		-- lsp & auto-complete
 		{ "williamboman/mason.nvim" },
 		{ "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
-		{ "neovim/nvim-lspconfig" },
 		{
 			"hrsh7th/nvim-cmp",
 			dependencies = {
@@ -43,7 +42,17 @@ require("lazy").setup({
 			},
 		},
 		{ "hrsh7th/cmp-nvim-lsp" },
-		{ "folke/neodev.nvim" },
+		{
+			"folke/lazydev.nvim",
+			ft = "lua", -- only load on lua files
+			opts = {
+				library = {
+					-- See the configuration section for more details
+					-- Load luvit types when the `vim.uv` word is found
+					{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+				},
+			},
+		},
 		-- format
 		{
 			"nvimtools/none-ls.nvim",
@@ -66,10 +75,20 @@ require("lazy").setup({
 			config = true,
 		},
 		{ "https://gn.googlesource.com/gn", rtp = "misc/vim" },
-		-- sidekick (shell panel)
+		-- sidekick (shell panel for CLI tools)
 		{ "folke/sidekick.nvim" },
-		-- terminal integration
-		{ "akinsho/toggleterm.nvim", version = "*" },
+		-- lightweight floating terminal (Lua)
+		{ "numToStr/FTerm.nvim" },
+		-- AI Agent: CodeCompanion
+		{
+			"olimorris/codecompanion.nvim",
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+				"nvim-treesitter/nvim-treesitter",
+				"j-hui/fidget.nvim",
+			},
+		},
+		{ "j-hui/fidget.nvim" },
 	},
 	checker = { enable = true },
 })
